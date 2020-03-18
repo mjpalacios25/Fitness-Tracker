@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
-var db = require("../model");
+var db = require("../models");
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/fitnessTracker", {
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/fitnessDB", {
   useNewUrlParser: true
 });
 
