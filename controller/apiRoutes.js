@@ -3,19 +3,10 @@ const db = require("../models");
 
 
 router.get("/api/workouts", (req, res) => {
-    db.Workouts.find({})
-        .then(dbNote => {
-            res.json(dbNote);
-        })
-        .catch(err => {
-            res.json(err);
-        });
-});
-
-router.get("/api/exercises", (req, res) => {
-    db.Exercise.find({})
-        .then(dbNote => {
-            res.json(dbNote);
+    db.workouts.find({})
+        .then(workoutData => {
+            console.log(workoutData);
+            res.json(workoutData)
         })
         .catch(err => {
             res.json(err);
@@ -23,9 +14,9 @@ router.get("/api/exercises", (req, res) => {
 });
 
 router.post("/api/workouts", ({ body }, res) => {
-    db.Workouts.create(body)
-        .then(dbTransaction => {
-            res.json(dbTransaction);
+    db.workouts.create(body)
+        .then(newWorkout => {
+            res.json(newWorkout);
         })
         .catch(err => {
             res.status(400).json(err);
@@ -33,8 +24,8 @@ router.post("/api/workouts", ({ body }, res) => {
 });
 
 router.post("/submit", ({ body }, res) => {
-    db.Exercise.create(body)
-        .then(({ _id }) => db.Workouts.findOneAndUpdate({}, { $push: { notes: _id } }, { new: true }))
+    db.exercise.create(body)
+        .then(({ _id }) => db.workouts.findOneAndUpdate({}, { $push: { notes: _id } }, { new: true }))
         .then(dbUser => {
             res.json(dbUser);
         })
@@ -42,3 +33,16 @@ router.post("/submit", ({ body }, res) => {
             res.json(err);
         });
 });
+
+router.get("/populatedWorkout/:workoutID", (req, res) => {
+    db.workouts.find({_id: req.params.workoutID})
+      .populate("exercies") //play with word... name of file or model?
+      .then(dbUser => {
+        res.json(dbUser);
+      })
+      .catch(err => {
+        res.json(err);
+      });
+  });
+
+module.exports = router;
