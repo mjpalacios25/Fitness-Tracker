@@ -15,8 +15,9 @@ router.get("/api/workouts", (req, res) => {
 
 router.get("/populatedWorkout/:workoutID", (req, res) => {
     db.workouts.find({_id: req.params.workoutID})
-      .populate("exercies") //play with word... name of file or model?
+      .populate("exercises") //play with word... name of file or model?
       .then(dbUser => {
+          console.log(dbUser)
         res.json(dbUser);
       })
       .catch(err => {
@@ -36,7 +37,7 @@ router.post("/api/workouts", ({ body }, res) => {
 
 router.post("/submit", ({ body }, res) => {
     db.exercise.create(body)
-        .then(({ _id }) => db.workouts.findOneAndUpdate({}, { $push: { notes: _id } }, { new: true }))
+        .then(({ _id }) => db.workouts.findOneAndUpdate({}, { $push: { exercises: _id } }, { new: true }))
         .then(dbUser => {
             res.json(dbUser);
         })

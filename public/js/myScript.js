@@ -9,6 +9,7 @@ function writeExercises(id){
     url: `/populatedWorkout/${id}`,
     method: "GET",
     success: result => {
+      console.log(result[0].exercises)
       for (exercise of result[0].exercises) {
         $("#exerciseList").append(`<li class="col-6">${exercise.name} (Reps: ${exercise.reps})</li>`)
       }
@@ -60,7 +61,7 @@ function writeAllWorkouts(response) {
               reps: (numReps > 0) ? numReps : undefined
           }
           $.ajax({
-              url: "/add",
+              url: "/submit",
               data: newExercise,
               method: "POST",
               success: result => {
@@ -99,7 +100,7 @@ function writeAllWorkouts(response) {
     $("#createWorkout").click((event) => {
         event.preventDefault();
         $.ajax({
-            url: "/submit",
+            url: "/api/workouts",
             data: { name: $("input[name*='workoutName']").val().trim() },
             method: "POST",
             success: (result) => {

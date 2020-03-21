@@ -7,6 +7,12 @@ const workoutSchema = new Schema({
     trim: true,
     required: "Enter a name for transaction"
   },
+  exercises: [
+    {
+    type: Schema.Types.ObjectId,
+    ref: "exercise"
+  }
+],
   date: {
     type: Date,
     default: Date.now
