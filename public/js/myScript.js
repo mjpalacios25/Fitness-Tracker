@@ -1,11 +1,12 @@
 $(document).ready(function(){
 
-    
+let alertTimeout = 0;
+
 //create function to display workouts
 function writeExercises(id){
   $("#exerciseList").html("");
   $.ajax({
-    url: `/populate/${id}`,
+    url: `/populatedWorkout/${id}`,
     method: "GET",
     success: result => {
       for (exercise of result[0].exercises) {
@@ -19,7 +20,7 @@ function writeExercises(id){
 
 //create function to list workouts
 function writeExerciseForm(buttonTarget) {
-  $("#getFit").append(`
+  $("#targetContainer").append(`
   <h2>Add Exercise to ${$(buttonTarget).text()}</h2>
   <form action="/add" method="post">
       <div class="form-group>
@@ -36,15 +37,15 @@ function writeExerciseForm(buttonTarget) {
 }
 
 function writeAllWorkouts(response) {
-  $("#getFit").html(`<h2>Choose a workout routine</h2>`)
+  $("#targetContainer").html(`<h2>Choose a workout routine</h2>`)
   for (routine of response) {
-      $("#getFit").append(`
+      $("#targetContainer").append(`
           <button class="btn btn-success workoutBtn" value="${routine._id}">${routine.name}</button>
       `)
   }
   $(".workoutBtn").click(event => {
       let workoutID = $(event.currentTarget).val();
-      $("#getFit").html(`
+      $("#targetContainer").html(`
       <h2>Current Routine</h2>
       <ul id="exerciseList" class="row"></ul>
       `)
@@ -83,9 +84,37 @@ function writeAllWorkouts(response) {
 }
 
     
-    $("#createWorkout").on("click", function(){
-      alert("Make a new workout.");
+    $("#newWorkout").on("click", function(event1){
+      event1.preventDefault()
       //add html for a form to create a new workout, then fetch to post/create new workout, then html to display workout
+      $("#targetContainer").html(`
+    <form action="/submit" method="post">
+        <div class="form-group">
+            <label for="workoutName">Name of Workout Routine</label>
+            <input class="form-control" type="text" name="workoutName" value="" placeholder="Workout Title">
+        </div>
+        <button class="btn btn-primary" id="createWorkout">Submit</button>
+    </form>
+    `);
+    $("#createWorkout").click((event) => {
+        event.preventDefault();
+        $.ajax({
+            url: "/submit",
+            data: { name: $("input[name*='workoutName']").val().trim() },
+            method: "POST",
+            success: (result) => {
+                clearTimeout(alertTimeout);
+                if (result != 'Workout validation failed') {
+                    location.reload();
+                } else {
+                    $(".alert-warning").text("Please enter the name of your new workout routine.").attr('style', 'display:block;')
+                    alertTimeout = setTimeout(() => {
+                        $(".alert-warning").attr('style', 'display:none;')
+                    }, 4000)
+                }
+            }
+        })
+    })
     });
 
     $("#seeWorkouts").on("click", function(event){
@@ -97,7 +126,7 @@ function writeAllWorkouts(response) {
         url: "/api/workouts", 
         method: "GET"
       }).then(function(data){
-        console.log(data[0].name)
+        writeAllWorkouts(data)
       })
       });
 

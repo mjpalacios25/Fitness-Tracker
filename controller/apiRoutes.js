@@ -13,6 +13,17 @@ router.get("/api/workouts", (req, res) => {
         });
 });
 
+router.get("/populatedWorkout/:workoutID", (req, res) => {
+    db.workouts.find({_id: req.params.workoutID})
+      .populate("exercies") //play with word... name of file or model?
+      .then(dbUser => {
+        res.json(dbUser);
+      })
+      .catch(err => {
+        res.json(err);
+      });
+  });
+
 router.post("/api/workouts", ({ body }, res) => {
     db.workouts.create(body)
         .then(newWorkout => {
@@ -34,15 +45,6 @@ router.post("/submit", ({ body }, res) => {
         });
 });
 
-router.get("/populatedWorkout/:workoutID", (req, res) => {
-    db.workouts.find({_id: req.params.workoutID})
-      .populate("exercies") //play with word... name of file or model?
-      .then(dbUser => {
-        res.json(dbUser);
-      })
-      .catch(err => {
-        res.json(err);
-      });
-  });
+
 
 module.exports = router;
