@@ -33,6 +33,7 @@ function writeExerciseForm(buttonTarget) {
           <input class="form-control" type="number" name="exerciseReps" value="" placeholder="# of Reps">
       </div>
       <button class="btn btn-primary" id="addExercise">Add to Workout</button>
+      <a href="" class="btn btn-primary" id="home">Home</a>
   </form>
   `);
 }
@@ -83,6 +84,10 @@ function writeAllWorkouts(response) {
               }
           })
       })
+
+      $("#home").click((event) => {
+        location.reload(event)
+      } )
   })
 }
 
@@ -97,6 +102,7 @@ function writeAllWorkouts(response) {
             <input class="form-control" type="text" name="workoutName" value="" placeholder="Workout Title">
         </div>
         <button class="btn btn-primary" id="createWorkout">Submit</button>
+        <a href="" class="btn btn-primary" id="home" style = "color, white">Home</a>
     </form>
     `);
     $("#createWorkout").click((event) => {
@@ -117,7 +123,12 @@ function writeAllWorkouts(response) {
                 }
             }
         })
-    })
+    });
+
+    $("#home").click((event) => {
+      location.reload()
+    });
+
     });
 
     $("#seeWorkouts").on("click", function(event){
