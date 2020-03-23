@@ -36,8 +36,14 @@ router.post("/api/workouts", ({ body }, res) => {
 });
 
 router.post("/submit", ({ body }, res) => {
-    db.exercise.create(body)
-        .then(({ _id }) => db.workouts.findOneAndUpdate({}, { $push: { exercises: _id } }, { new: true }))
+    let exerciseInfo = {
+        name: body.name,
+        reps: body.reps
+    };
+    console.log(body)
+    console.log(exerciseInfo);
+    db.exercise.create(exerciseInfo)
+        .then(({ _id }) => db.workouts.findOneAndUpdate({_id: body.workout}, { $push: { exercises: _id } }, { new: true })) //insert workout ID somewhere
         .then(dbUser => {
             res.json(dbUser);
         })

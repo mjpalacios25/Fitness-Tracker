@@ -9,7 +9,7 @@ function writeExercises(id){
     url: `/populatedWorkout/${id}`,
     method: "GET",
     success: result => {
-      console.log(result[0].exercises)
+      console.log(result[0])
       for (exercise of result[0].exercises) {
         $("#exerciseList").append(`<li class="col-6">${exercise.name} (Reps: ${exercise.reps})</li>`)
       }
@@ -46,6 +46,7 @@ function writeAllWorkouts(response) {
   }
   $(".workoutBtn").click(event => {
       let workoutID = $(event.currentTarget).val();
+      console.log(workoutID)
       $("#targetContainer").html(`
       <h2>Current Routine</h2>
       <ul id="exerciseList" class="row"></ul>
@@ -59,7 +60,8 @@ function writeAllWorkouts(response) {
               workout: workoutID,
               name: $("input[name*='exerciseName']").val().trim(),
               reps: (numReps > 0) ? numReps : undefined
-          }
+          };
+          console.log(workoutID)
           $.ajax({
               url: "/submit",
               data: newExercise,
