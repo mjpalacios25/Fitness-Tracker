@@ -22,4 +22,4 @@ This is a website that allows users to track their workouts, exercises, and reps
 
 ## Link to Website
 Github: https://github.com/mjpalacios25/Fitness-Tracker 
-Working Link: https://mjpalacios25.github.io/Fitness-Tracker/ 
+Heroku Deployment: https://shrouded-stream-05616.herokuapp.com/
