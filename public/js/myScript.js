@@ -11,7 +11,7 @@ function writeExercises(id){
     success: result => {
       console.log(result[0])
       for (exercise of result[0].exercises) {
-        $("#exerciseList").append(`<li class="col-6">${exercise.name} (Reps: ${exercise.reps})</li>`)
+        $("#exerciseList").append(`<li>${exercise.name} (Reps: ${exercise.reps})</li>`)
       }
     }
   })
@@ -21,7 +21,7 @@ function writeExercises(id){
 
 //create function to list workouts
 function writeExerciseForm(buttonTarget) {
-  $("#targetContainer").append(`
+  $("#exerciseForm").append(`
   <h2>Add Exercise to ${$(buttonTarget).text()}</h2>
   <form action="/add" method="post">
       <div class="form-group>
@@ -39,9 +39,12 @@ function writeExerciseForm(buttonTarget) {
 }
 
 function writeAllWorkouts(response) {
-  $("#targetContainer").html(`<h2>Choose a workout routine</h2>`)
+  $("#targetContainer").html(`
+    <div class = "col-md-12 text-center" id = "workouts">
+      <h2>Choose a workout routine</h2>
+    </div>`)
   for (routine of response) {
-      $("#targetContainer").append(`
+      $("#workouts").append(`
           <button class="btn btn-success workoutBtn" value="${routine._id}">${routine.name}</button>
       `)
   }
@@ -49,8 +52,11 @@ function writeAllWorkouts(response) {
       let workoutID = $(event.currentTarget).val();
       console.log(workoutID)
       $("#targetContainer").html(`
-      <h2>Current Routine</h2>
-      <ul id="exerciseList" class="row"></ul>
+      <div class = "col-md-4">
+        <h2>Current Routine</h2>
+        <ul id="exerciseList"></ul>
+      </div>
+      <div class= "col-md-8" id = "exerciseForm"></div>
       `)
       writeExercises(workoutID)
       writeExerciseForm(event.currentTarget)
@@ -96,14 +102,16 @@ function writeAllWorkouts(response) {
       event1.preventDefault()
       //add html for a form to create a new workout, then fetch to post/create new workout, then html to display workout
       $("#targetContainer").html(`
-    <form action="/submit" method="post">
+    <div class = "col-md-12 mx-auto" >  
+    <form class= "text-center" action="/submit" method="post">
         <div class="form-group">
             <label for="workoutName">Name of Workout Routine</label>
-            <input class="form-control" type="text" name="workoutName" value="" placeholder="Workout Title">
+            <input class="form-control text-center" type="text" name="workoutName" value="" placeholder="Workout Title">
         </div>
         <button class="btn btn-primary" id="createWorkout">Submit</button>
         <a href="" class="btn btn-primary" id="home" style = "color, white">Home</a>
     </form>
+    </div>
     `);
     $("#createWorkout").click((event) => {
         event.preventDefault();
